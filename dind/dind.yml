@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: gary
+  name: dind
+  labels:
+    app: dind
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: dind
+      labels:
+        app: dind
+    spec:
+      containers:
+        - name: dind
+          image: docker:dind
+          securityContext:
+            privileged: true
+          # imagePullPolicy: Always
+      #     env:
+      #       - name: DOCKER_TLS_CERTDIR
+      #         value: /certs
+      # #       - name: SERVER_NAME
+      # #         value: "SonarQube"
+      # #       - name: DEFAULT_PLAYER_PERMISSION_LEVEL
+      # #         value: visitor
+      # #     volumeMounts:
+      # #       - mountPath: /data
+      # #         name: data
+      #     volumeMounts:
+      #       - name: certs-volume
+      #         mountPath: "/certs"    
+      #     command: ["dockerd"]
+      #     args: ["--host=unix:///var/run/docker.sock"
+      #             ,"--host=tcp://0.0.0.0:2376"
+      #             ,"--tlsverify"
+      #             ,"--tlscacert","$(DOCKER_TLS_CERTDIR)/server/ca.pem"
+      #             ,"--tlscert","$(DOCKER_TLS_CERTDIR)/server/server-cert.pem"
+      #             ,"--tlskey","$(DOCKER_TLS_CERTDIR)/server/server-key.pem"
+      #           ]                
+      # # volumes:
+      # #   - name: data
+      # #     persistentVolumeClaim:
+      # #       claimName: dind-disk
+      # volumes:
+      #   - name: certs-volume
+      #     configMap:
+      #       name: dind-cert
+      #       items:
+      #       - key: ca.pem
+      #         path: server/ca.pem
+      #       # - key: cert.pem
+      #       #   path: client/cert.pem
+      #       - key: server-cert.pem
+      #         path: server/server-cert.pem
+      #       - key: server-key.pem
+      #         path: server/server-key.pem
+  selector:
+    matchLabels:
+      app: dind
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: gary
+  name: dind
+spec:
+  selector:
+    app: dind
+  ports:
+    - port: 443
+      targetPort: 2376
+      protocol: TCP
+  type: LoadBalancer
+#kubectl apply -f dind.yml
+#kubectl get pods
+#kubectl get services
+#kubectl get service -n gary dind -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
