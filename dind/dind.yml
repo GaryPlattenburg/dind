@@ -18,45 +18,6 @@ spec:
           image: docker:dind
           securityContext:
             privileged: true
-          # imagePullPolicy: Always
-      #     env:
-      #       - name: DOCKER_TLS_CERTDIR
-      #         value: /certs
-      # #       - name: SERVER_NAME
-      # #         value: "SonarQube"
-      # #       - name: DEFAULT_PLAYER_PERMISSION_LEVEL
-      # #         value: visitor
-      # #     volumeMounts:
-      # #       - mountPath: /data
-      # #         name: data
-      #     volumeMounts:
-      #       - name: certs-volume
-      #         mountPath: "/certs"    
-      #     command: ["dockerd"]
-      #     args: ["--host=unix:///var/run/docker.sock"
-      #             ,"--host=tcp://0.0.0.0:2376"
-      #             ,"--tlsverify"
-      #             ,"--tlscacert","$(DOCKER_TLS_CERTDIR)/server/ca.pem"
-      #             ,"--tlscert","$(DOCKER_TLS_CERTDIR)/server/server-cert.pem"
-      #             ,"--tlskey","$(DOCKER_TLS_CERTDIR)/server/server-key.pem"
-      #           ]                
-      # # volumes:
-      # #   - name: data
-      # #     persistentVolumeClaim:
-      # #       claimName: dind-disk
-      # volumes:
-      #   - name: certs-volume
-      #     configMap:
-      #       name: dind-cert
-      #       items:
-      #       - key: ca.pem
-      #         path: server/ca.pem
-      #       # - key: cert.pem
-      #       #   path: client/cert.pem
-      #       - key: server-cert.pem
-      #         path: server/server-cert.pem
-      #       - key: server-key.pem
-      #         path: server/server-key.pem
   selector:
     matchLabels:
       app: dind
